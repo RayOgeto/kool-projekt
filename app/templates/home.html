@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Downa connect</title>
+</head>
+<body>
+   {% if current_user.is_authenticated %}
+    <p>Welcome, {{ current_user.username }}!</p>
+    <a href='{{ url_for('main.dashboard') }}'>Dashboard</a> |
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+{% else %}
+    <a href="{{ url_for('auth.login') }}">Login</a> |
+    <a href="{{ url_for('auth.register') }}">Register</a>
+{% endif %}
+<p>Welcome to Downa connect!</p>
+<p>Downa connect is a platform that connects donors and recipients.</p>
+</body>
+</html>

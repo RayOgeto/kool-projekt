@@ -1,0 +1,9 @@
+<h2>Request a Resource</h2>
+<form method="POST">
+    Item Needed: <input type="text" name="item_needed" required><br>
+    Quantity: <input type="text" name="quantity"><br>
+    Reason: <textarea name="reason"></textarea><br>
+    Location: <input type="text" name="location" required><br>
+    <button type="submit">Submit</button>
+</form>
+<a href="{{ url_for('main.dashboard') }}">Back to Dashboard</a>

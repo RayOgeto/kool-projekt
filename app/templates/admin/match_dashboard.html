@@ -1,0 +1,15 @@
+<h2>Admin Dashboard - Match Donations</h2>
+
+<h3>Unmatched Donations</h3>
+<ul>
+    {% for d in donations %}
+        <li><strong>{{ d.item }}</strong> ({{ d.quantity }}) from Donor {{ d.donor_id }} in {{ d.location }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Unfulfilled Requests</h3>
+<ul>
+    {% for r in requests %}
+        <li><strong>{{ r.item_needed }}</strong> ({{ r.quantity }}) requested by Recipient {{ r.recipient_id }} in {{ r.location }}</li>
+    {% endfor %}
+</ul>

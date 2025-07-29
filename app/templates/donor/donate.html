@@ -1,0 +1,9 @@
+<h2>Submit a Donation</h2>
+<form method="POST">
+    Item: <input type="text" name="item" required><br>
+    Quantity: <input type="text" name="quantity"><br>
+    Description: <textarea name="description"></textarea><br>
+    Location: <input type="text" name="location" required><br>
+    <button type="submit">Submit</button>
+</form>
+<a href="{{ url_for('main.dashboard') }}">Back to Dashboard</a>
