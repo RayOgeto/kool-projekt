@@ -48,7 +48,6 @@ def init_database():
         db.create_all()
         
 
-#route malanding and redirecting
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
