@@ -1,8 +1,643 @@
-<h2>Donor Dashboard</h2>
-<p>Welcome, {{ current_user.username }}!</p>
-<a href="{{ url_for('auth.logout') }}">Logout</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartShare - Donor Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<ul>
-    <li><a href="#">Create Donation</a></li>
-    <li><a href="#">View My Donations</a></li>
-</ul>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #FAFAFA;
+            color: #111827;
+            line-height: 1.6;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, #2563EB 0%, #0891B2 100%);
+            color: #FFFFFF;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="welcome-pattern" patternUnits="userSpaceOnUse" width="25" height="25"><circle cx="12.5" cy="12.5" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23welcome-pattern)"/></svg>');
+            opacity: 0.6;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .welcome-text h2 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: #EA580C;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            background: #C2410C;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(234, 88, 12, 0.3);
+        }
+
+        .logout-btn {
+            background: #DC2626;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: #B91C1C;
+            transform: translateY(-2px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #FFFFFF;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .stat-icon.donations {
+            background: #FFF7ED;
+            color: #EA580C;
+        }
+
+        .stat-icon.impact {
+            background: #ECFDF5;
+            color: #059669;
+        }
+
+        .stat-icon.community {
+            background: #EFF6FF;
+            color: #2563EB;
+        }
+
+        .stat-icon.goal {
+            background: #F0F9FF;
+            color: #0891B2;
+        }
+
+        .stat-number {
+            font-size: 2.2em;
+            font-weight: 800;
+            color: #111827;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: #6B7280;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .stat-change {
+            font-size: 0.8em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .stat-change.positive {
+            color: #059669;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .card-action {
+            color: #2563EB;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: color 0.3s ease;
+        }
+
+        .card-action:hover {
+            color: #1D4ED8;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.donation {
+            background: #FFF7ED;
+            color: #EA580C;
+        }
+
+        .activity-icon.received {
+            background: #ECFDF5;
+            color: #059669;
+        }
+
+        .activity-icon.message {
+            background: #EFF6FF;
+            color: #2563EB;
+        }
+
+        .activity-content h4 {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 5px;
+        }
+
+        .activity-content p {
+            color: #6B7280;
+            font-size: 0.9em;
+        }
+
+        .activity-time {
+            color: #9CA3AF;
+            font-size: 0.8em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #059669 0%, #0891B2 100%);
+            transition: width 0.3s ease;
+            animation: progressAnimation 2s ease-out;
+        }
+
+        @keyframes progressAnimation {
+            from { width: 0; }
+        }
+
+        .notification {
+            background: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .notification-icon {
+            color: #2563EB;
+            font-size: 1.2em;
+            margin-top: 2px;
+        }
+
+        .notification-content h4 {
+            color: #111827;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .notification-content p {
+            color: #6B7280;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .welcome-text h2 {
+                font-size: 2em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                justify-content: center;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="welcome-section fade-in">
+            <div class="welcome-content">
+                <div class="welcome-text">
+                    <h2>Welcome back, {{ current_user.username }}! 👋</h2>
+                    <p>Your kindness is making a real difference in the world. Here's what's happening in your HeartShare community today.</p>
+                </div>
+                <div class="user-actions">
+                    <a href="{{ url_for('auth.logout') }}" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <a href="donor/donate.html" class="action-btn">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    Create Donation
+                </a>
+                <a href="#" class="action-btn">
+                    <i class="fas fa-list"></i>
+                    View My Donations
+                </a>
+                <a href="#" class="action-btn">
+                    <i class="fas fa-users"></i>
+                    Join Community
+                </a>
+            </div>
+        </div>
+
+        <div class="stats-grid fade-in">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-info">
+                        <div class="stat-number" id="totalDonations">12</div>
+                        <div class="stat-label">Total Donations</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +3 this month
+                        </div>
+                    </div>
+                    <div class="stat-icon donations">
+                        <i class="fas fa-donate"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-info">
+                        <div class="stat-number" id="livesImpacted">47</div>
+                        <div class="stat-label">Lives Impacted</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +8 this week
+                        </div>
+                    </div>
+                    <div class="stat-icon impact">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-info">
+                        <div class="stat-number" id="communityRank">Top 10%</div>
+                        <div class="stat-label">Community Rank</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            Improved
+                        </div>
+                    </div>
+                    <div class="stat-icon community">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-info">
+                        <div class="stat-number" id="monthlyGoal">85%</div>
+                        <div class="stat-label">Monthly Goal</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-icon goal">
+                        <i class="fas fa-target"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-grid fade-in">
+            <div class="main-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Activity</h3>
+                        <a href="#" class="card-action">View All</a>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon donation">
+                                <i class="fas fa-donate"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>Donation Submitted</h4>
+                                <p>You donated clothing items to "Help Local Families" campaign</p>
+                                <div class="activity-time">2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon received">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>Thank You Received</h4>
+                                <p>Sarah M. sent you a thank you message for your support</p>
+                                <div class="activity-time">5 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon message">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>New Message</h4>
+                                <p>Update from "Community Garden Project" you supported</p>
+                                <div class="activity-time">1 day ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon donation">
+                                <i class="fas fa-hand-holding-heart"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>Campaign Completed</h4>
+                                <p>"Emergency Medical Fund" reached its goal thanks to your help</p>
+                                <div class="activity-time">2 days ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Impact This Month</h3>
+                    </div>
+                    <div class="impact-stats">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="font-size: 3em; color: #EA580C; margin-bottom: 10px;">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div style="font-size: 2em; font-weight: 800; color: #111827;">47</div>
+                            <div style="color: #6B7280; font-size: 0.9em;">People Helped</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                        <p style="text-align: center; color: #6B7280; font-size: 0.9em; margin-top: 10px;">
+                            85% towards monthly impact goal
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Quick Stats</h3>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="margin-bottom: 15px;">
+                            <div style="font-size: 1.5em; font-weight: 700; color: #2563EB;">12</div>
+                            <div style="color: #6B7280; font-size: 0.9em;">Donations Made</div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <div style="font-size: 1.5em; font-weight: 700; color: #059669;">100%</div>
+                            <div style="color: #6B7280; font-size: 0.9em;">Success Rate</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.5em; font-weight: 700; color: #EA580C;">5.0★</div>
+                            <div style="color: #6B7280; font-size: 0.9em;">Community Rating</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animate numbers on load
+        function animateCounters() {
+            const counters = [
+                { element: 'totalDonations', target: 12, duration: 1500 },
+                { element: 'livesImpacted', target: 47, duration: 1800 },
+                { element: 'monthlyGoal', target: 85, suffix: '%', duration: 1500 }
+            ];
+
+            counters.forEach(counter => {
+                const element = document.getElementById(counter.element);
+                if (!element) return;
+                
+                let current = 0;
+                const increment = counter.target / (counter.duration / 16);
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= counter.target) {
+                        current = counter.target;
+                        clearInterval(timer);
+                    }
+                    
+                    const value = Math.floor(current);
+                    const suffix = counter.suffix || '';
+                    element.textContent = value + suffix;
+                }, 16);
+            });
+        }
+
+        // Add staggered animations to cards
+        function addStaggeredAnimations() {
+            const cards = document.querySelectorAll('.stat-card, .card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('fade-in');
+            });
+        }
+
+        // Add interactive hover effects
+        function addInteractiveEffects() {
+            const activityItems = document.querySelectorAll('.activity-item');
+            activityItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0)';
+                });
+            });
+        }
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            animateCounters();
+            addStaggeredAnimations();
+            addInteractiveEffects();
+        });
+    </script>
+</body>
+</html>

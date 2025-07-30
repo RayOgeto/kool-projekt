@@ -1,7 +1,827 @@
-<h2>Login</h2>
-<form method="POST">
-    Email: <input type="email" name="email" required><br>
-    Password: <input type="password" name="password" required><br>
-    <button type="submit">Login</button>
-</form>
-<p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartShare - Welcome Back</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #FAFAFA 0%, #F0F9FF 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #FFFFFF;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.1);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 550px;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .image-section {
+            background: linear-gradient(135deg, #0891B2 0%, #2563EB 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            overflow: hidden;
+            
+           
+        }
+
+        .image-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:url("/static/images/hands.jpg") ;
+             background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.6;
+        }
+
+        .image-content {
+            text-align: center;
+            color: #FFFFFF;
+            z-index: 2;
+            position: relative;
+        }
+
+        .welcome-icon {
+            font-size: 70px;
+            color: #EA580C;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .image-content h2 {
+            font-size: 2.3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .image-content p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .stats {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #EA580C;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .form-section {
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo h1 {
+            color: #2563EB;
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: #6B7280;
+            font-size: 0.9em;
+        }
+
+        .welcome-back {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome-back h3 {
+            color: #111827;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .welcome-back p {
+            color: #6B7280;
+            font-size: 0.95em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #111827;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid #D1D5DB;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #FFFFFF;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2563EB;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-group input:focus + .input-icon {
+            color: #2563EB;
+        }
+
+        .form-group input::placeholder {
+            color: #9CA3AF;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2563EB;
+        }
+
+        .remember-me label {
+            color: #6B7280;
+            font-size: 0.9em;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: #2563EB;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #1D4ED8;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            color: #FFFFFF;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .login-btn:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            color: #6B7280;
+            font-size: 0.9em;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #E5E7EB;
+            z-index: 1;
+        }
+
+        .divider span {
+            background: #FFFFFF;
+            padding: 0 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .social-login {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .social-btn {
+            padding: 12px;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            background: #FFFFFF;
+            color: #6B7280;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-btn:hover {
+            border-color: #2563EB;
+            color: #2563EB;
+            transform: translateY(-2px);
+        }
+
+        .signup-link {
+            text-align: center;
+            color: #6B7280;
+        }
+
+        .signup-link a {
+            color: #EA580C;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            color: #C2410C;
+        }
+
+        .error-message {
+            color: #DC2626;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .success-message {
+            background: #ECFDF5;
+            color: #059669;
+            border: 1px solid #A7F3D0;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-message {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        /* Flask flash messages */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .flash-message.success {
+            background: #ECFDF5;
+            color: #059669;
+            border: 1px solid #A7F3D0;
+        }
+
+        .flash-message.error {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+        }
+
+        .flash-message.info {
+            background: #EFF6FF;
+            color: #2563EB;
+            border: 1px solid #BFDBFE;
+        }
+
+        .home {
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .home a {
+            text-decoration: none;
+            color: #1D4ED8;
+        }
+
+        .home a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                max-width: 450px;
+            }
+
+            .image-section {
+                padding: 30px;
+                min-height: 200px;
+            }
+
+            .form-section {
+                padding: 30px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .social-login {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-icon {
+                font-size: 50px;
+            }
+
+            .image-content h2 {
+                font-size: 1.8em;
+            }
+
+            .form-options {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-section">
+            <div class="image-content">
+                <i class="fas fa-hands-helping welcome-icon"></i>
+                <h2>Welcome Back</h2>
+                <p>Continue your journey of making a positive impact in the world. Your community is waiting for you.</p>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number">2,847</span>
+                        <div class="stat-label">Lives Touched</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">125K</span>
+                        <div class="stat-label">Donations Made</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="logo">
+                <h1>UjamaaFlow</h1>
+                <p>Building bridges of compassion</p>
+            </div>
+
+            <div class="welcome-back">
+                <h3>Sign In</h3>
+                <p>Enter your credentials to access your account</p>
+            </div>
+
+            <!-- Flask flash messages -->
+            <!-- {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                {% if category == 'error' %}
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                {% elif category == 'success' %}
+                                    <i class="fas fa-check-circle"></i>
+                                {% elif category == 'info' %}
+                                    <i class="fas fa-info-circle"></i>
+                                {% endif %}
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %} -->
+
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i> Login successful! Redirecting to dashboard...
+            </div>
+
+            <div class="alert-message" id="alertMessage">
+                <i class="fas fa-exclamation-triangle"></i> <span id="alertText"></span>
+            </div>
+
+            <!-- Flask form -->
+            <form id="loginForm" method="POST">
+                {{ csrf_token() if csrf_token }}
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        <label for="rememberMe">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>or continue with</span>
+            </div>
+
+            <div class="social-login">
+                <a href="#" class="social-btn" id="googleLogin">
+                    <i class="fab fa-google"></i> Google
+                </a>
+                <a href="#" class="social-btn" id="facebookLogin">
+                    <i class="fab fa-facebook-f"></i> Facebook
+                </a>
+            </div>
+
+            <div class="signup-link">
+                Don't have an account? <a href="{{ url_for('auth.register') }}">Create one here</a>
+            </div>
+            <div class="home">
+                ⬅️<a href="{{ url_for('main.home') }}">Back to Homepage</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class LoginValidator {
+            constructor() {
+                this.form = document.getElementById('loginForm');
+                this.initializeValidation();
+                this.setupEventListeners();
+            }
+
+            initializeValidation() {
+                // Real-time validation
+                const inputs = this.form.querySelectorAll('input[type="email"], input[type="password"]');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', () => this.validateField(input));
+                    input.addEventListener('input', () => this.clearError(input));
+                });
+
+                // Form submission validation
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+            }
+
+            setupEventListeners() {
+                // Forgot password functionality
+                document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.handleForgotPassword();
+                });
+
+                // Social login handlers (you can customize these for your Flask routes)
+                document.getElementById('googleLogin').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.handleSocialLogin('google');
+                });
+
+                document.getElementById('facebookLogin').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.handleSocialLogin('facebook');
+                });
+            }
+
+            validateField(field) {
+                const fieldName = field.name;
+                const value = field.value.trim();
+
+                switch(fieldName) {
+                    case 'email':
+                        return this.validateEmail(value);
+                    case 'password':
+                        return this.validatePassword(value);
+                    default:
+                        return true;
+                }
+            }
+
+            validateEmail(email) {
+                if (!email) {
+                    this.showError('emailError', 'Email address is required');
+                    return false;
+                }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    this.showError('emailError', 'Please enter a valid email address');
+                    return false;
+                }
+                this.clearErrorById('emailError');
+                return true;
+            }
+
+            validatePassword(password) {
+                if (!password) {
+                    this.showError('passwordError', 'Password is required');
+                    return false;
+                }
+                if (password.length < 6) {
+                    this.showError('passwordError', 'Password must be at least 6 characters long');
+                    return false;
+                }
+                this.clearErrorById('passwordError');
+                return true;
+            }
+
+            showError(elementId, message) {
+                const errorElement = document.getElementById(elementId);
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+
+            clearError(field) {
+                const errorElement = document.getElementById(field.name + 'Error');
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            }
+
+            clearErrorById(elementId) {
+                const errorElement = document.getElementById(elementId);
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            }
+
+            showAlert(message, type = 'error') {
+                const alertElement = document.getElementById('alertMessage');
+                const alertText = document.getElementById('alertText');
+                
+                alertText.textContent = message;
+                alertElement.style.display = 'block';
+                
+                if (type === 'success') {
+                    alertElement.className = 'success-message';
+                    document.getElementById('successMessage').style.display = 'block';
+                    alertElement.style.display = 'none';
+                } else {
+                    alertElement.className = 'alert-message';
+                }
+
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    alertElement.style.display = 'none';
+                }, 5000);
+            }
+
+            handleSubmit(e) {
+                // Clear all previous errors
+                const errorElements = document.querySelectorAll('.error-message');
+                errorElements.forEach(el => el.style.display = 'none');
+                
+                // Hide any previous alerts
+                document.getElementById('alertMessage').style.display = 'none';
+
+                // Validate all fields
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+
+                let isValid = true;
+
+                isValid = this.validateEmail(email) && isValid;
+                isValid = this.validatePassword(password) && isValid;
+
+                if (!isValid) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                // Show loading state
+                const submitBtn = document.getElementById('loginBtn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+                submitBtn.disabled = true;
+
+                // Let Flask handle the actual form submission
+                // The loading state will be reset when the page reloads or redirects
+            }
+
+            handleForgotPassword() {
+                const email = document.getElementById('email').value.trim();
+                
+                if (!email) {
+                    this.showAlert('Please enter your email address first.');
+                    document.getElementById('email').focus();
+                    return;
+                }
+
+                if (!this.validateEmail(email)) {
+                    this.showAlert('Please enter a valid email address.');
+                    document.getElementById('email').focus();
+                    return;
+                }
+
+                // You can implement forgot password functionality here
+                // For now, showing a message
+                this.showAlert('Password reset functionality will be implemented soon.', 'info');
+            }
+
+            handleSocialLogin(provider) {
+                // You can implement social login routes here
+                // For example: window.location.href = `/auth/${provider}`;
+                this.showAlert(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login will be implemented soon.`);
+            }
+        }
+
+        // Initialize the login validator when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new LoginValidator();
+
+            // Animate form elements on load
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.form-group').forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = `all 0.6s ease ${index * 0.1}s`;
+                observer.observe(el);
+            });
+
+            // Auto-hide flash messages after 5 seconds
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(message => {
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    message.style.transform = 'translateY(-10px)';
+                    setTimeout(() => {
+                        message.style.display = 'none';
+                    }, 300);
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>

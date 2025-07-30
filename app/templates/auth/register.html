@@ -1,13 +1,752 @@
-<h2>Register</h2>
-<form method="POST">
-    Username: <input type="text" name="username" required><br>
-    Email: <input type="email" name="email" required><br>
-    Password: <input type="password" name="password" required><br>
-    Role: 
-    <select name="role">
-        <option value="donor">Donor</option>
-        <option value="recipient">Recipient</option>
-    </select><br>
-    <button type="submit">Register</button>
-</form>
-<p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartShare - Join Our Community</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #FAFAFA 0%, #F0F9FF 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #FFFFFF;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.1);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .image-section {
+            background: linear-gradient(135deg, #2563EB 0%, #0891B2 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            overflow: hidden;
+            
+            
+        }
+
+        .image-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.7;
+            background-size: cover;
+            background-image:url("/static/images/donor.jpg") ;
+        }
+
+        .image-content {
+            text-align: center;
+            color: #FFFFFF;
+            z-index: 2;
+            position: relative;
+        }
+
+        .heart-icon {
+            font-size: 80px;
+            color: #EA580C;
+            margin-bottom: 20px;
+            animation: heartbeat 2s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .image-content h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .image-content p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .form-section {
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #2563EB;
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: #6B7280;
+            font-size: 0.9em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #111827;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .required {
+            color: #DC2626;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #D1D5DB;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #FFFFFF;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563EB;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-group input::placeholder {
+            color: #9CA3AF;
+        }
+
+        .role-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .role-option {
+            position: relative;
+        }
+
+        .role-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .role-label {
+            display: block;
+            padding: 20px 15px;
+            border: 2px solid #D1D5DB;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #FFFFFF;
+        }
+
+        .role-label:hover {
+            border-color: #2563EB;
+            transform: translateY(-2px);
+        }
+
+        .role-option input[type="radio"]:checked + .role-label {
+            border-color: #2563EB;
+            background: #EFF6FF;
+            color: #2563EB;
+        }
+
+        .role-label i {
+            display: block;
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .role-label span {
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .role-label .role-desc {
+            font-size: 0.8em;
+            color: #6B7280;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .role-option input[type="radio"]:checked + .role-label .role-desc {
+            color: #2563EB;
+        }
+
+        .register-btn {
+            background: linear-gradient(135deg, #EA580C 0%, #C2410C 100%);
+            color: #FFFFFF;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(234, 88, 12, 0.3);
+        }
+
+        .register-btn:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #6B7280;
+        }
+
+        .login-link a {
+            color: #2563EB;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #1D4ED8;
+        }
+
+        .error-message {
+            color: #DC2626;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .success-message {
+            background: #ECFDF5;
+            color: #059669;
+            border: 1px solid #A7F3D0;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            display: none;
+        }
+
+        .strength-weak {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+        }
+
+        .strength-medium {
+            background: #FFFBEB;
+            color: #D97706;
+            border: 1px solid #FED7AA;
+        }
+
+        .strength-strong {
+            background: #ECFDF5;
+            color: #059669;
+            border: 1px solid #A7F3D0;
+        }
+
+        /* Flask Flash Messages */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-weight: 500;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .flash-message.error {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+        }
+
+        .flash-message.success {
+            background: #ECFDF5;
+            color: #059669;
+            border: 1px solid #A7F3D0;
+        }
+
+        .flash-message.info {
+            background: #EFF6FF;
+            color: #2563EB;
+            border: 1px solid #BFDBFE;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+
+            .image-section {
+                padding: 30px;
+                min-height: 200px;
+            }
+
+            .form-section {
+                padding: 30px;
+            }
+
+            .role-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .heart-icon {
+                font-size: 60px;
+            }
+
+            .image-content h2 {
+                font-size: 2em;
+            }
+        }
+
+        .home {
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .home a {
+            text-decoration: none;
+            color: #1D4ED8;
+        }
+
+        .home a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #FFFFFF;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-section">
+            <div class="image-content">
+                <i class="fas fa-heart heart-icon"></i>
+                <h2>Join UjamaaFlow</h2>
+                <p>Connect hearts, share hope, and make a difference in someone's life today. Together, we can build a community that cares.</p>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="logo">
+                <h1>HeartShare</h1>
+                <p>Building bridges of compassion</p>
+            </div>
+
+            <!-- Flask Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                <i class="fas fa-info-circle"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i> Account created successfully! Welcome to HeartShare!
+            </div>
+
+            <form id="registerForm" method="POST">
+                <div class="form-group">
+                    <label for="username">Username <span class="required">*</span></label>
+                    <input type="text" id="username" name="username" placeholder="Choose a unique username" required>
+                    <div class="error-message" id="usernameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+                    <div class="password-strength" id="passwordStrength"></div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Choose Your Role <span class="required">*</span></label>
+                    <div class="role-selection">
+                        <div class="role-option">
+                            <input type="radio" id="donor" name="role" value="donor" required>
+                            <label for="donor" class="role-label">
+                                <i class="fas fa-hand-holding-heart"></i>
+                                <span>Donor</span>
+                                <div class="role-desc">Share resources with those in need</div>
+                            </label>
+                        </div>
+                        <div class="role-option">
+                            <input type="radio" id="recipient" name="role" value="recipient" required>
+                            <label for="recipient" class="role-label">
+                                <i class="fas fa-hands-helping"></i>
+                                <span>Recipient</span>
+                                <div class="role-desc">Find resources for yourself or family</div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="roleError"></div>
+                </div>
+
+                <button type="submit" class="register-btn" id="registerBtn">
+                    <span id="submitText"><i class="fas fa-user-plus"></i> Register</span>
+                    <div class="loading" id="submitLoading" style="display: none;"></div>
+                </button>
+            </form>
+
+            <div class="login-link">
+                Already have an account? <a href="{{ url_for('auth.login') }}">Login</a>
+            </div>
+            
+            <div class="home">
+                ⬅️ <a href="{{ url_for('main.home') }}">Back to Homepage</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class FormValidator {
+            constructor() {
+                this.form = document.getElementById('registerForm');
+                this.initializeValidation();
+            }
+
+            initializeValidation() {
+                // Real-time validation
+                const inputs = this.form.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', () => this.validateField(input));
+                    input.addEventListener('input', () => this.clearError(input));
+                });
+
+                // Password strength checker
+                document.getElementById('password').addEventListener('input', (e) => {
+                    this.checkPasswordStrength(e.target.value);
+                });
+
+                // Role validation
+                document.querySelectorAll('[name="role"]').forEach(radio => {
+                    radio.addEventListener('change', () => {
+                        const errorDiv = document.getElementById('roleError');
+                        errorDiv.style.display = 'none';
+                    });
+                });
+
+                // Form submission
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+            }
+
+            validateField(field) {
+                const fieldName = field.name;
+                const value = field.value.trim();
+
+                switch(fieldName) {
+                    case 'username':
+                        return this.validateUsername(value);
+                    case 'email':
+                        return this.validateEmail(value);
+                    case 'password':
+                        return this.validatePassword(value);
+                    default:
+                        return true;
+                }
+            }
+
+            validateUsername(username) {
+                if (!username) {
+                    this.showError('usernameError', 'Username is required');
+                    return false;
+                }
+                if (username.length < 3) {
+                    this.showError('usernameError', 'Username must be at least 3 characters long');
+                    return false;
+                }
+                if (username.length > 20) {
+                    this.showError('usernameError', 'Username must be less than 20 characters');
+                    return false;
+                }
+                if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                    this.showError('usernameError', 'Username can only contain letters, numbers and underscores');
+                    return false;
+                }
+                return true;
+            }
+
+            validateEmail(email) {
+                if (!email) {
+                    this.showError('emailError', 'Email address is required');
+                    return false;
+                }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    this.showError('emailError', 'Please enter a valid email address');
+                    return false;
+                }
+                return true;
+            }
+
+            validatePassword(password) {
+                if (!password) {
+                    this.showError('passwordError', 'Password is required');
+                    return false;
+                }
+                if (password.length < 8) {
+                    this.showError('passwordError', 'Password must be at least 8 characters long');
+                    return false;
+                }
+                if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+                    this.showError('passwordError', 'Password must contain at least one uppercase letter, one lowercase letter, and one number');
+                    return false;
+                }
+                return true;
+            }
+
+            validateRole() {
+                const roleSelected = document.querySelector('input[name="role"]:checked');
+                if (!roleSelected) {
+                    this.showError('roleError', 'Please select your role');
+                    return false;
+                }
+                return true;
+            }
+
+            checkPasswordStrength(password) {
+                const strengthIndicator = document.getElementById('passwordStrength');
+                
+                if (!password) {
+                    strengthIndicator.style.display = 'none';
+                    return;
+                }
+
+                strengthIndicator.style.display = 'block';
+                
+                let score = 0;
+                let feedback = [];
+
+                // Length check
+                if (password.length >= 8) score++;
+                else feedback.push('at least 8 characters');
+
+                // Uppercase check
+                if (/[A-Z]/.test(password)) score++;
+                else feedback.push('an uppercase letter');
+
+                // Lowercase check
+                if (/[a-z]/.test(password)) score++;
+                else feedback.push('a lowercase letter');
+
+                // Number check
+                if (/\d/.test(password)) score++;
+                else feedback.push('a number');
+
+                // Special character check
+                if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+                else feedback.push('a special character');
+
+                if (score < 3) {
+                    strengthIndicator.className = 'password-strength strength-weak';
+                    strengthIndicator.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Weak password. Add: ${feedback.join(', ')}`;
+                } else if (score < 4) {
+                    strengthIndicator.className = 'password-strength strength-medium';
+                    strengthIndicator.innerHTML = `<i class="fas fa-shield-alt"></i> Medium strength. Consider adding: ${feedback.join(', ')}`;
+                } else {
+                    strengthIndicator.className = 'password-strength strength-strong';
+                    strengthIndicator.innerHTML = '<i class="fas fa-check-circle"></i> Strong password!';
+                }
+            }
+
+            showError(elementId, message) {
+                const errorElement = document.getElementById(elementId);
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+
+            clearError(field) {
+                const errorElement = document.getElementById(field.name + 'Error');
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                
+                // Clear all previous errors
+                const errorElements = document.querySelectorAll('.error-message');
+                errorElements.forEach(el => el.style.display = 'none');
+
+                // Validate all fields
+                const username = document.getElementById('username').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+
+                let isValid = true;
+
+                isValid = this.validateUsername(username) && isValid;
+                isValid = this.validateEmail(email) && isValid;
+                isValid = this.validatePassword(password) && isValid;
+                isValid = this.validateRole() && isValid;
+
+                if (isValid) {
+                    this.submitForm();
+                }
+            }
+
+            submitForm() {
+                const submitBtn = document.getElementById('registerBtn');
+                const submitText = document.getElementById('submitText');
+                const submitLoading = document.getElementById('submitLoading');
+                
+                // Show loading state
+                submitText.style.display = 'none';
+                submitLoading.style.display = 'inline-block';
+                submitBtn.disabled = true;
+
+                // Submit the form normally (Flask will handle it)
+                this.form.submit();
+            }
+        }
+
+        // Initialize the form validator when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new FormValidator();
+        });
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate form elements on load
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.form-group').forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = `all 0.6s ease ${index * 0.1}s`;
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -45,7 +45,7 @@ def donate():
         flash("Donation submitted! Thanks for danating on downa")
         return redirect(url_for(main.dashboard))
     
-    return render_template('donate.html')
+    return render_template('donor/donate.html')
     
 @main.route('/request-resource', methods=['GET', 'POST'])
 @login_required
