@@ -17,6 +17,10 @@ def dashboard():
         return render_template('dashboard/donor_dashboard.html')
     elif current_user.role == 'recipient':
         return render_template('dashboard/recipient_dashboard.html')
+    elif current_user.role == 'admin':
+        return render_template('admin/match_dashboard.html')
+
+
     else:
         return render_template('home.html')
     
@@ -42,7 +46,7 @@ def donate():
         )
         db.session.add(new_donation)
         db.session.commit()
-        flash("Donation submitted! Thanks for danating on downa")
+        flash("Donation submitted! Thanks for danating on UjamaaFlow")
         return redirect(url_for(main.dashboard))
     
     return render_template('donate.html')
@@ -85,3 +89,16 @@ def admin_dashboard():
     unfulfilled_requests = ResourceRequest.query.filter_by(fulfilled=False).all()
 
     return render_template('admin/match_dashboard.html', donations=unmatched_donations, requests=unfulfilled_requests)
+
+@main.route('/contact')
+def contact():
+    return render_template('contact/contact.html')
+# @main.route('/admin')
+# def contact():
+#     return render_template('admin/match_dashboard.html')
+@main.route('/resource')
+def resource():
+    return render_template('resources/resource.html')
+@main.route('/recipient')
+def recipient_dashboard():
+    return render_template('dashboard/recipient_dashboard.html')

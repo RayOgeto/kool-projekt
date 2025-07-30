@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resources Received</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f8;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+
+    .navbar {
+      background-color: #1E3A8A;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 40px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .logo-accent {
+      color: #F97316;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #FCD34D;
+    }
+
+    .resources-header {
+      background-color: #1E3A8A;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+    }
+
+    .resources-header h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .resources-header p {
+      font-size: 18px;
+      color: #DBEAFE;
+    }
+
+    .resources-table {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    th, td {
+      padding: 16px 18px;
+      text-align: left;
+      font-size: 16px;
+      border-bottom: 1px solid #E5E7EB;
+    }
+
+    th {
+      background-color: #EFF6FF;
+      color: #2563EB;
+    }
+
+    tr:nth-child(even) {
+      background-color: #F9FAFB;
+    }
+
+    tr:hover {
+      background-color: #F3F4F6;
+    }
+
+    .site-footer {
+      background-color: #1F2937;
+      color: #9CA3AF;
+      text-align: center;
+      padding: 24px;
+      font-size: 15px;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .resources-header h1 {
+        font-size: 28px;
+      }
+
+      th, td {
+        font-size: 14px;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">Ujamaaflow <span class="logo-accent">.</span></div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('main.admin_dashboard') }}">Admin</a></li>
+      <li><a href="{{ url_for('main.resource') }}">Resources</a></li>
+      <li><a href="{{ url_for('main.dashboard') }}">Receivers</a></li>
+      <li><a href="{{ url_for('main.contact') }}">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <header class="resources-header">
+    <h1>Donated Resources</h1>
+    <p>A transparent record of all types of donations we've received to support our cause.</p>
+  </header>
+
+  <section class="resources-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Resource</th>
+          <th>Type</th>
+          <th>Donor</th>
+          <th>Quantity/Amount</th>
+          <th>Date</th>
+          <th>Notes</th>
+          <th>Tracking</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Winter Jackets</td>
+          <td>Clothing</td>
+          <td>Mary K.</td>
+          <td>15</td>
+          <td>2025-07-18</td>
+          <td>To be distributed in Nakuru</td>
+          <td style="color: #DC2626;">Rejected</td>
+        </tr>
+        <tr>
+          <td>Ksh 20,000</td>
+          <td>Money</td>
+          <td>Anonymous</td>
+          <td>20,000</td>
+          <td>2025-07-15</td>
+          <td>For medical emergency</td>
+          <td style="color: #F59E0B;">Pending</td>
+        </tr>
+        <tr>
+          <td>Blood Donation</td>
+          <td>Medical</td>
+          <td>County Hospital</td>
+          <td>10 Units</td>
+          <td>2025-07-10</td>
+          <td>For emergency surgery</td>
+          <td style="color: #16A34A;">Approved</td>
+        </tr>
+        <tr>
+          <td>Books & Stationery</td>
+          <td>Education</td>
+          <td>Bright Future Org</td>
+          <td>Boxes (3)</td>
+          <td>2025-07-09</td>
+          <td>Targeted to rural schools</td>
+          <td style="color: #F59E0B;">Pending</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer class="site-footer">
+    <p>&copy; 2025 YourOrganization. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <style>
+
+.contact-hero {
+  background-color: #1E40AF;
+  color: white;
+  text-align: center;
+  padding: 1px 20px;
+}
+
+.contact-hero h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.contact-hero p {
+  font-size: 18px;
+  color: #FED7AA;
+}
+
+
+.contact-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+
+.contact-form, .contact-info {
+  flex: 1;
+  min-width: 300px;
+  max-width: 500px;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.contact-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.contact-form input,
+.contact-form textarea {
+  margin-top: 6px;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  color: #111827;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #2563EB;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+
+.btn-primary {
+  margin-top: 20px;
+  background-color: #EA580C;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #C2410C;
+}
+
+
+.contact-info h2 {
+  margin-bottom: 10px;
+  color: #2563EB;
+}
+
+
+.navbar {
+  background-color: #1E40AF;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 32px;
+  align-items: center;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logo-accent {
+  color: #EA580C;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: #FED7AA;
+}
+
+.site-footer {
+  background-color: #374151;
+  color: #D1D5DB;
+  text-align: center;
+  padding: 20px;
+  margin-top: 60px;
+}
+  body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #FAFAFA;
+  color: #111827;
+}
+
+
+    </style>
+
+
+
+
+<nav class="navbar">
+  <div class="logo">UjamaaFlow <span class="logo-accent"></span></div>
+  <ul class="nav-links">
+    <li><a href="{{ url_for('main.admin_dashboard') }}">Admin</a></li>
+    <li><a href="{{ url_for('main.resource') }}">Resources</a></li>
+    <li><a href="{{ url_for('main.dashboard') }}">Receivers</a></li>
+    <li><a href="{{ url_for('main.contact') }}">Contact Us</a></li>
+  </ul>
+</nav>
+
+  <header class="contact-hero">
+    <h1>Contact Us</h1>
+    <p>We’d love to hear from you. Reach out with questions, feedback, or support inquiries.</p>
+  </header>
+
+  <main class="contact-container">
+    <section class="contact-form">
+      <form>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required placeholder="Your full name">
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="you@example.com">
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" required placeholder="Your message..."></textarea>
+
+        <button type="submit" class="btn-primary">Send Message</button>
+      </form>
+    </section>
+
+    <section class="contact-info">
+      <h2>Reach Us</h2>
+      <p><strong>Email:</strong> support@yourdomain.org</p>
+      <p><strong>Phone:</strong> +254 712 345 678</p>
+      <p><strong>Location:</strong> Nairobi, Kenya</p>
+    </section>
+  </main>
+<footer class="site-footer">
+  <p>&copy; 2025 YourOrganization. All rights reserved.</p>
+</footer>
+</body>
+</html>
