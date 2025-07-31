@@ -751,19 +751,3 @@
     </script>
 </body>
 </html>
-=======
-<h2>Register</h2>
-<form method="POST">
-    Username: <input type="text" name="username" required><br>
-    Email: <input type="email" name="email" required><br>
-    Password: <input type="password" name="password" required><br>
-    Role: 
-    <select name="role">
-        <option value="donor">Donor</option>
-        <option value="recipient">Recipient</option>
-        <option value="admin">Admin</option>
-    </select><br>
-    <button type="submit">Register</button>
-</form>
-<p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
->>>>>>> fd62b1ade42b18f3b35f5284500a2c96d306f3f6
