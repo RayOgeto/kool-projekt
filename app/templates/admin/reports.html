@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin • Reports</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#f8fafc;color:#111827}
+    .container{max-width:1100px;margin:20px auto;padding:0 16px}
+    .nav{display:flex;gap:12px;margin-bottom:16px}
+    a.nav-link{background:#1E40AF;color:#fff;text-decoration:none;padding:8px 12px;border-radius:8px}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e5e7eb}
+    th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left}
+    form{display:inline}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <a class="nav-link" href="{{ url_for('main.admin_dashboard') }}">Overview</a>
+      <a class="nav-link" href="{{ url_for('main.admin_donations') }}">Donations</a>
+      <a class="nav-link" href="{{ url_for('main.admin_requests') }}">Requests</a>
+      <a class="nav-link" href="{{ url_for('main.admin_reports') }}">Reports</a>
+    </div>
+    <h1>Reports</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Donation</th><th>Reporter</th><th>Reason</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td>{{ r.id }}</td>
+          <td>#{{ r.donation_id }}</td>
+          <td>#{{ r.reporter_id }}</td>
+          <td>{{ r.reason or 'N/A' }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('main.admin_resolve_report', report_id=r.id) }}">
+              <button type="submit">Resolve</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
+
+

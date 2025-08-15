@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HeartShare - Donor Dashboard</title>
+    <title>UjamaaFlow - Donor Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
@@ -19,9 +19,62 @@
             line-height: 1.6;
         }
 
+        .navbar {
+            background: rgba(30, 64, 175, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .nav-bar1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            margin-left:60px;
+            color:#fff;
+        }
+
+        .logo-accent {
+            color: #F97316;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 24px;
+            margin-right: 60px;
+            font-size: 18px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            padding:12px;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #FCD34D;
+            text-decoration: underline;
+        }
+
         .main-container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin-top: 80px;
+            margin-left: auto;
+            margin-right: auto;
+            align-items:center;
             padding: 30px 20px;
         }
 
@@ -386,6 +439,17 @@
     </style>
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-bar1">
+            <div style="font-weight:800;" class="logo">UjamaaFlow</div>
+            <div style="display:flex;gap:10px;" class="nav-links">
+                <a href="{{ url_for('main.dashboard') }}" style="color:#fff;text-decoration:none;">Dashboard</a>
+                <a href="{{ url_for('main.donate') }}" style="color:#fff;text-decoration:none;">Create Donation</a>
+                <a href="{{ url_for('main.my_donations') }}" style="color:#fff;text-decoration:none;">My Donations</a>
+                <a href="{{ url_for('auth.logout') }}" style="color:#fff;text-decoration:none;">Logout</a>
+            </div>
+        </div>
+    </nav>
     <div class="main-container">
         <div class="welcome-section fade-in">
             <div class="welcome-content">
@@ -400,32 +464,27 @@
                     </a>
                 </div>
             </div>
-            <div class="quick-actions">
-                <a href="donor/donate.html" class="action-btn">
-                    <i class="fas fa-hand-holding-heart"></i>
-                    Create Donation
-                </a>
-                <a href="#" class="action-btn">
-                    <i class="fas fa-list"></i>
-                    View My Donations
-                </a>
-                <a href="#" class="action-btn">
-                    <i class="fas fa-users"></i>
-                    Join Community
-                </a>
+            
+        </div>
+
+        {% if total_donations == 0 %}
+        <div class="card fade-in" style="margin-bottom:20px;">
+            <div class="card-header">
+                <h3 class="card-title">Get Started</h3>
+            </div>
+            <p style="color:#6B7280;">Start your first donation to see your impact here.</p>
+            <div style="margin-top:12px;">
+                <a href="{{ url_for('main.donate') }}" class="action-btn"><i class="fas fa-hand-holding-heart"></i> Create Donation</a>
             </div>
         </div>
+        {% endif %}
 
         <div class="stats-grid fade-in">
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-info">
-                        <div class="stat-number" id="totalDonations">12</div>
+                        <div class="stat-number" id="totalDonations">{{ total_donations }}</div>
                         <div class="stat-label">Total Donations</div>
-                        <div class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i>
-                            +3 this month
-                        </div>
                     </div>
                     <div class="stat-icon donations">
                         <i class="fas fa-donate"></i>
@@ -436,12 +495,8 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-info">
-                        <div class="stat-number" id="livesImpacted">47</div>
+                        <div class="stat-number" id="livesImpacted">{{ lives_impacted }}</div>
                         <div class="stat-label">Lives Impacted</div>
-                        <div class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i>
-                            +8 this week
-                        </div>
                     </div>
                     <div class="stat-icon impact">
                         <i class="fas fa-heart"></i>
@@ -452,15 +507,11 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-info">
-                        <div class="stat-number" id="communityRank">Top 10%</div>
-                        <div class="stat-label">Community Rank</div>
-                        <div class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i>
-                            Improved
-                        </div>
+                        <div class="stat-number" id="matchedDonations">{{ matched_donations }}</div>
+                        <div class="stat-label">Matched Donations</div>
                     </div>
                     <div class="stat-icon community">
-                        <i class="fas fa-trophy"></i>
+                        <i class="fas fa-handshake"></i>
                     </div>
                 </div>
             </div>
@@ -468,10 +519,10 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-info">
-                        <div class="stat-number" id="monthlyGoal">85%</div>
-                        <div class="stat-label">Monthly Goal</div>
+                        <div class="stat-number" id="successRate">{{ success_rate }}%</div>
+                        <div class="stat-label">Success Rate</div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 85%"></div>
+                            <div class="progress-fill" id="successRateFill" data-width="{{ success_rate }}"></div>
                         </div>
                     </div>
                     <div class="stat-icon goal">
@@ -489,71 +540,35 @@
                         <a href="#" class="card-action">View All</a>
                     </div>
                     <div class="activity-list">
-                        <div class="activity-item">
-                            <div class="activity-icon donation">
-                                <i class="fas fa-donate"></i>
+                        {% if recent_donations %}
+                            {% for d in recent_donations %}
+                                <div class="activity-item">
+                                    <div class="activity-icon donation">
+                                        <i class="fas fa-donate"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <h4>Donation Submitted</h4>
+                                        <p>{{ d.item }} • Qty: {{ d.quantity or 'N/A' }} • {{ d.location or 'No location' }}</p>
+                                        <div class="activity-time">Status: {{ 'Matched' if d.matched else 'Pending' }}</div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="activity-item">
+                                <div class="activity-icon message">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h4>No recent donations</h4>
+                                    <p>Start your first donation to see it here.</p>
+                                </div>
                             </div>
-                            <div class="activity-content">
-                                <h4>Donation Submitted</h4>
-                                <p>You donated clothing items to "Help Local Families" campaign</p>
-                                <div class="activity-time">2 hours ago</div>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon received">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <div class="activity-content">
-                                <h4>Thank You Received</h4>
-                                <p>Sarah M. sent you a thank you message for your support</p>
-                                <div class="activity-time">5 hours ago</div>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon message">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="activity-content">
-                                <h4>New Message</h4>
-                                <p>Update from "Community Garden Project" you supported</p>
-                                <div class="activity-time">1 day ago</div>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon donation">
-                                <i class="fas fa-hand-holding-heart"></i>
-                            </div>
-                            <div class="activity-content">
-                                <h4>Campaign Completed</h4>
-                                <p>"Emergency Medical Fund" reached its goal thanks to your help</p>
-                                <div class="activity-time">2 days ago</div>
-                            </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
 
             <div class="sidebar">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Impact This Month</h3>
-                    </div>
-                    <div class="impact-stats">
-                        <div style="text-align: center; margin-bottom: 20px;">
-                            <div style="font-size: 3em; color: #EA580C; margin-bottom: 10px;">
-                                <i class="fas fa-heart"></i>
-                            </div>
-                            <div style="font-size: 2em; font-weight: 800; color: #111827;">47</div>
-                            <div style="color: #6B7280; font-size: 0.9em;">People Helped</div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 85%"></div>
-                        </div>
-                        <p style="text-align: center; color: #6B7280; font-size: 0.9em; margin-top: 10px;">
-                            85% towards monthly impact goal
-                        </p>
-                    </div>
-                </div>
 
                 <div class="card">
                     <div class="card-header">
@@ -634,7 +649,11 @@
 
         // Initialize dashboard when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            animateCounters();
+            const srFill = document.getElementById('successRateFill');
+            if (srFill) {
+                const w = parseInt(srFill.getAttribute('data-width') || '0', 10);
+                srFill.style.width = w + '%';
+            }
             addStaggeredAnimations();
             addInteractiveEffects();
         });

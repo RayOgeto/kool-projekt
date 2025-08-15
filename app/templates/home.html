@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Downa connect - Connecting Hearts Through Sharing</title>
+    <title>UjamaaFlow</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -841,7 +841,7 @@
                 </div>
                 
                 <div class="footer-bottom">
-                    <p>&copy; 2025 Downa connect. All rights reserved. Made with ❤️ for our community.</p>
+                    <p>&copy; 2025 UjamaaFlow. All rights reserved. Made with ❤️ for our community.</p>
                 </div>
             </div>
         </footer>
@@ -994,17 +994,5 @@
             createParticles();
         });
     </script>
-=======
-   {% if current_user.is_authenticated %}
-    <p>Welcome, {{ current_user.username }}!</p>
-    <a href="{{ url_for('main.dashboard')}}">Dashboard</a> |
-    <a href="{{ url_for('auth.logout') }}">Logout</a>
-{% else %}
-    <a href="{{ url_for('auth.login') }}">Login</a> |
-    <a href="{{ url_for('auth.register') }}">Register</a>
-{% endif %}
-<p>Welcome to UjamaaFlow!</p>
-<p>UjamaaFlow is a platform that connects donors and recipients.</p>
->>>>>>> fd62b1ade42b18f3b35f5284500a2c96d306f3f6
 </body>
 </html>

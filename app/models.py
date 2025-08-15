@@ -1,4 +1,5 @@
 from . import db
+from datetime import datetime
 from flask_login import UserMixin
 
 class User(db.Model, UserMixin):
@@ -15,6 +16,10 @@ class Donation(db.Model):
     description = db.Column(db.Text)
     location = db.Column(db.String(100))
     matched = db.Column(db.Boolean, default=False)
+    flagged = db.Column(db.Boolean, default=False)
+    # Relationships
+    media = db.relationship('DonationMedia', backref='donation', lazy=True, cascade='all, delete-orphan')
+    reports = db.relationship('DonationReport', backref='donation', lazy=True, cascade='all, delete-orphan')
 
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,3 +29,22 @@ class Request(db.Model):
     reason = db.Column(db.Text)
     location = db.Column(db.String(100))
     fulfilled = db.Column(db.Boolean, default=False)
+
+class Match(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    donation_id = db.Column(db.Integer, db.ForeignKey('donation.id'), nullable=False)
+    request_id = db.Column(db.Integer, db.ForeignKey('request.id'), nullable=False)
+    status = db.Column(db.String(20), default='matched')  # matched | fulfilled | cancelled
+
+class DonationMedia(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    donation_id = db.Column(db.Integer, db.ForeignKey('donation.id'), nullable=False)
+    file_path = db.Column(db.String(300), nullable=False)  # Web-accessible path e.g., /static/uploads/...
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class DonationReport(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    donation_id = db.Column(db.Integer, db.ForeignKey('donation.id'), nullable=False)
+    reporter_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    reason = db.Column(db.String(300))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

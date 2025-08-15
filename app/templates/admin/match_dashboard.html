@@ -1,309 +1,307 @@
-<!-- <h2>Admin Dashboard - Match Donations</h2> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #FAFAFA;
+      color: #111827;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: #1E40AF;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 32px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .logo-accent {
+      color: #EA580C;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .nav-links a:hover {
+      color: #FED7AA;
+    }
+
+    /* Header */
+    .admin-header {
+      background-color: #1E40AF;
+      color: #FFFFFF;
+      text-align: center;
+      padding: 20px 10px;
+    }
+    .admin-header h1 {
+      font-size: 34px;
+      margin-bottom: 5px;
+    }
+    .admin-header p {
+      font-size: 16px;
+      color: #FED7AA;
+      margin: 4px 0;
+    }
+    .admin-header a {
+      color: #FED7AA;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* Dashboard Stats */
+    .dashboard-stats {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 30px auto;
+      max-width: 1200px;
+    }
+    .stat-card {
+      background-color: #FFFFFF;
+      border-radius: 10px;
+      padding: 20px;
+      flex: 1 1 250px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .stat-card h3 {
+      margin-bottom: 10px;
+      color: #2563EB;
+    }
+    .stat-card p {
+      font-size: 26px;
+      font-weight: bold;
+      margin: 0;
+    }
+    .badge {
+      background-color: #EA580C;
+      color: white;
+      padding: 2px 8px;
+      font-size: 12px;
+      border-radius: 6px;
+      margin-left: 5px;
+    }
+
+    /* Search & Filter */
+    .search-filter {
+      max-width: 1200px;
+      margin: 20px auto;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 0 10px;
+    }
+    .search-filter input,
+    .search-filter select {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #D1D5DB;
+      border-radius: 6px;
+      flex: 1;
+    }
+    .search-btn {
+      background-color: #2563EB;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .search-btn:hover {
+      background-color: #1D4ED8;
+    }
+
+    /* Admin Cards */
+    .admin-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+    .admin-card {
+      background-color: #FFFFFF;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .admin-card h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #2563EB;
+    }
+    .admin-card p {
+      flex-grow: 1;
+      color: #6B7280;
+    }
+    .btn-primary,
+    .btn-secondary,
+    .btn-warning {
+      margin-top: 15px;
+      padding: 10px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-primary { background-color: #EA580C; color: white; }
+    .btn-primary:hover { background-color: #C2410C; }
+    .btn-secondary { background-color: #2563EB; color: white; }
+    .btn-secondary:hover { background-color: #1D4ED8; }
+    .btn-warning { background-color: #D97706; color: white; }
+    .btn-warning:hover { background-color: #B45309; }
+
+    /* Footer */
+    .site-footer {
+      background-color: #374151;
+      color: #D1D5DB;
+      text-align: center;
+      padding: 20px;
+      margin-top: 60px;
+    }
+  </style>
 </head>
 <body>
-<nav class="navbar">
-  <div class="logo">UjamaaFlow <span class="logo-accent"></span></div>
-  <ul class="nav-links">
-<li><a href="{{ url_for('main.admin_dashboard') }}">Admin</a></li>
-    <li><a href="{{ url_for('main.resource') }}">Resources</a></li>
-    <li><a href="{{ url_for('main.dashboard') }}">Receivers</a></li>
-    <li><a href="{{ url_for('main.contact') }}">Contact Us</a></li>
-  </ul>
-</nav>
 
-<header class="admin-header">
-  <h1>Admin Dashboard</h1>
-  <p>Manage users, donations, and content from one place.</p>
-  <p>Welcome, {{ current_user.username }}!</p>
-  <a href="{{ url_for('auth.logout') }}">Logout</a>
-</header>
-  
-<main class="admin-container">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">UjamaaFlow <span class="logo-accent">Admin</span></div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('main.admin_dashboard') }}">Overview</a></li>
+      <li><a href="{{ url_for('main.admin_donations') }}">Donations</a></li>
+      <li><a href="{{ url_for('main.admin_requests') }}">Requests</a></li>
+      <li><a href="{{ url_for('main.admin_reports') }}">Reports</a></li>
+    </ul>
+  </nav>
 
-  <!-- Dashboard Stats -->
+  <!-- Header -->
+  <header class="admin-header">
+    <h1>Admin Dashboard</h1>
+    <p>Manage users, donations, and content from one place.</p>
+    <p>Welcome, {{ current_user.username }}! | <a href="{{ url_for('auth.logout') }}">Logout</a></p>
+  </header>
+
+  <!-- Stats -->
   <section class="dashboard-stats">
     <div class="stat-card">
       <h3>Total Donations</h3>
-      <p>154</p>
+      <p>{{ total_donations }}</p>
     </div>
     <div class="stat-card">
-      <h3>Items Distributed</h3>
-      <p>128</p>
+      <h3>Total Requests</h3>
+      <p>{{ total_requests }}</p>
     </div>
     <div class="stat-card">
-      <h3>Top Donors</h3>
-      <ul>
-        <li>Jane M. - 10 items</li>
-        <li>OpenHearts Org. - 8 items</li>
-        <li>John D. - 7 items</li>
-      </ul>
+      <h3>Reports <span class="badge">{{ total_reports }}</span></h3>
+      <p>{{ total_reports }}</p>
     </div>
   </section>
+  <section style="max-width: 1200px; margin: auto; padding: 20px;">
+      <h2>Donations</h2>
+      {% if donations %}
+        <ul>
+          {% for d in donations %}
+            <li>{{ d.item }} - {{ d.category }} - {{ d.location }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No donations found.</p>
+      {% endif %}
 
-  <!-- Admin Controls -->
-  <section class="admin-card">
-    <h2>Receivers</h2>
-    <p>View and approve new receiver applications.</p>
-    <button class="btn-primary">Go to Receivers</button>
+      <h2>Requests</h2>
+      {% if requests %}
+        <ul>
+          {% for r in requests %}
+            <li>{{ r.item_needed }} - {{ r.category }} - {{ r.location }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No requests found.</p>
+      {% endif %}
   </section>
 
-  <section class="admin-card">
-    <h2>Donations Overview</h2>
-    <p>Monitor recent donations and progress on campaigns.</p>
-    <button class="btn-secondary">View Donations</button>
-  </section>
 
-  <section class="admin-card">
-    <h2>User Feedback</h2>
-    <p>Read messages from users via the contact form.</p>
-    <button class="btn-primary">Check Messages</button>
-  </section>
-
-  <section class="admin-card warning-card">
-    <h2>Pending Approvals</h2>
-    <p>You have 4 new requests waiting.</p>
-    <button class="btn-warning">Review Now</button>
-  </section>
-
-  <section class="admin-card">
-    <h2>All Listings</h2>
-    <p>This is where you control listings </p>
-    <button class="btn-primary">Go to Listings</button>
-  </section>
-
-  <section class="admin-card">
-    <h2>Expired/Inappropriate</h2>
-    <p>Control expired and Inappropriate donations </p>
-    <button class="btn-primary">Remove expired/Inappropriate</button>
-  </section>
-
-  <section class="admin-card">
-    <h2>All Users</h2>
-    <p>Find all users with one click</p>
-    <button class="btn-primary">Go to Users</button>
-  </section>
-
-  <section class="admin-card">
-    <h2>Sort</h2>
-    <p>Nothing to sort</p>
-    <button class="btn-primary">Sort Now</button>
-  </section>
-
-  <section class="admin-card">
-    <h2>Reports</h2>
-    <p>No reports yet</p>
-    <button class="btn-primary">Check Reports Now</button>
-  </section>
-
-</main>
-
-<footer class="site-footer">
-  <img src="img/linkedin.svg" alt="">
-  <p>&copy; 2025 YourOrganization. All rights reserved.</p>
-</footer>
-
-<script src="script.js"></script>
+  <!-- Search & Filter -->
+  <div class="search-filter">
+  <form method="GET" action="{{ url_for('main.dashboard') }}" style="display: flex; gap: 10px; flex-wrap: wrap; width: 100%;">
+    <input type="text" name="search" placeholder="Search donations or requests..." value="{{ search }}">
+    <select name="category">
+      <option value="">Filter by category</option>
+      <option value="food" {% if category == 'food' %}selected{% endif %}>Food</option>
+      <option value="clothes" {% if category == 'clothes' %}selected{% endif %}>Clothes</option>
+      <option value="medical" {% if category == 'medical' %}selected{% endif %}>Medical</option>
+    </select>
+    <button type="submit" class="search-btn">Search</button>
+  </form>
+</div>
 
 
-<style>
-    .admin-header {
-  background-color: #1E40AF;
-  color: #FFFFFF;
-  text-align: center;
-  padding: 1px 1px;
-}
+  <!-- Action Cards -->
+  <main class="admin-container">
+    <section class="admin-card warning-card">
+      <h2>Pending Approvals <span class="badge">4</span></h2>
+      <p>You have requests waiting for review.</p>
+      <button class="btn-warning">Review Now</button>
+    </section>
 
-.admin-header h1 {
-  font-size: 34px;
-  margin-bottom: 10px;
-}
+    <section class="admin-card">
+      <h2>All Listings</h2>
+      <p>Manage all active and inactive listings.</p>
+      <button class="btn-primary">Go to Listings</button>
+    </section>
 
-.admin-header p {
-  font-size: 16px;
-  color: #FED7AA;
-}
+    <section class="admin-card">
+      <h2>Reports</h2>
+      <p>View and handle inappropriate or expired donations.</p>
+      <button class="btn-primary">Manage Reports</button>
+    </section>
 
-.admin-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-  padding: 40px 20px;
-  background-color: #FAFAFA;
-}
+    <section class="admin-card">
+      <h2>All Users</h2>
+      <p>Find and manage all user accounts.</p>
+      <button class="btn-primary">Go to Users</button>
+    </section>
 
-.admin-card {
-  background-color: #FFFFFF;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+    <section class="admin-card">
+      <h2>Match Donations</h2>
+      <p>Match donations to unfulfilled requests.</p>
+      <a class="btn-secondary" href="{{ url_for('main.create_match') }}">Start Matching</a>
+    </section>
 
-.admin-card h2 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: #2563EB;
-}
+    <section class="admin-card">
+      <h2>Receivers</h2>
+      <p>View and approve new receiver applications.</p>
+      <button class="btn-primary">Go to Receivers</button>
+    </section>
+  </main>
 
-.admin-card p {
-  flex-grow: 1;
-  color: #6B7280;
-}
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2025 YourOrganization. All rights reserved.</p>
+  </footer>
 
-
-.btn-primary {
-  margin-top: 15px;
-  background-color: #EA580C;
-  color: white;
-  padding: 10px 16px;
-  font-size: 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  background-color: #C2410C;
-}
-
-.btn-secondary {
-  margin-top: 15px;
-  background-color: #2563EB;
-  color: white;
-  padding: 10px 16px;
-  font-size: 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.btn-secondary:hover {
-  background-color: #1D4ED8;
-}
-
-.btn-warning {
-  margin-top: 15px;
-  background-color: #D97706;
-  color: white;
-  padding: 10px 16px;
-  font-size: 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.btn-warning:hover {
-  background-color: #B45309;
-}
-
-.warning-card {
-  border-left: 5px solid #D97706;
-  background-color: #FFFBEB;
-}
-.dashboard-stats {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 40px;
-}
-
-.stat-card {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: 20px;
-  flex: 1 1 250px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.stat-card h3 {
-  margin-bottom: 10px;
-}
-
-.stat-card p {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.stat-card ul {
-  list-style-type: disc;
-  padding-left: 20px;
-  margin: 0;
-}
-.navbar {
-  background-color: #1E40AF;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 32px;
-  align-items: center;
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.logo-accent {
-  color: #EA580C;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-}
-
-.nav-links a {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.nav-links a:hover {
-  color: #FED7AA;
-}
-
-.site-footer {
-  background-color: #374151;
-  color: #D1D5DB;
-  text-align: center;
-  padding: 20px;
-  margin-top: 60px;
-}
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #FAFAFA;
-  color: #111827;
-}
-
-
-</style>
 </body>
 </html>
- 
-
-<h3>Unmatched Donations</h3>
-<ul>
-    {% for d in donations %}
-        <li><strong>{{ d.item }}</strong> ({{ d.quantity }}) from Donor {{ d.donor_id }} in {{ d.location }}</li>
-    {% endfor %}
-</ul>
-
-<h3>Unfulfilled Requests</h3>
-<ul>
-    {% for r in requests %}
-        <li><strong>{{ r.item_needed }}</strong> ({{ r.quantity }}) requested by Recipient {{ r.recipient_id }} in {{ r.location }}</li>
-    {% endfor %}
-</ul>

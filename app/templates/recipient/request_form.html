@@ -1,9 +1,100 @@
-<h2>Request a Resource</h2>
-<form method="POST" action="">
-    Item Needed: <input type="text" name="item_needed" required><br>
-    Quantity: <input type="text" name="quantity"><br>
-    Reason: <textarea name="reason"></textarea><br>
-    Location: <input type="text" name="location" required><br>
-    <button type="submit">Submit</button>
+<h2 class="page-title">Request a Resource</h2>
+
+<form method="POST" action="" class="request-form">
+  <div class="form-group">
+    <label>Item Needed</label>
+    <input type="text" name="item_needed" required>
+  </div>
+
+  <div class="form-group">
+    <label>Quantity</label>
+    <input type="text" name="quantity">
+  </div>
+
+  <div class="form-group">
+    <label>Reason</label>
+    <textarea name="reason" rows="4"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>Location</label>
+    <input type="text" name="location" required>
+  </div>
+
+  <button type="submit" class="submit-btn">Submit Request</button>
 </form>
-<a href="{{ url_for('main.dashboard') }}">Back to Dashboard</a>
+
+<a href="{{ url_for('main.dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+<style>
+  .page-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    color: #1E40AF;
+    margin-bottom: 20px;
+  }
+
+  .request-form {
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #374151;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 12px 14px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    outline-color: #60a5fa;
+  }
+
+  .form-group textarea {
+    resize: vertical;
+  }
+
+  .submit-btn {
+    background-color: #1E40AF;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease;
+  }
+
+  .submit-btn:hover {
+    background-color: #3B82F6;
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #1E40AF;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>

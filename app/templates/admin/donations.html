@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin • Donations</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#f8fafc;color:#111827}
+    .container{max-width:1100px;margin:20px auto;padding:0 16px}
+    .nav{display:flex;gap:12px;margin-bottom:16px}
+    a.nav-link{background:#1E40AF;color:#fff;text-decoration:none;padding:8px 12px;border-radius:8px}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e5e7eb}
+    th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left}
+    .pill{padding:4px 8px;border-radius:9999px;font-size:.8em}
+    .pill.matched{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+    .pill.pending{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+    form{display:inline}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <a class="nav-link" href="{{ url_for('main.admin_dashboard') }}">Overview</a>
+      <a class="nav-link" href="{{ url_for('main.admin_donations') }}">Donations</a>
+      <a class="nav-link" href="{{ url_for('main.admin_requests') }}">Requests</a>
+      <a class="nav-link" href="{{ url_for('main.admin_reports') }}">Reports</a>
+    </div>
+    <h1>All Donations</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Item</th><th>Donor</th><th>Qty</th><th>Location</th><th>Status</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in donations %}
+        <tr>
+          <td>{{ d.id }}</td>
+          <td>{{ d.item }}</td>
+          <td>{{ d.donor_id }}</td>
+          <td>{{ d.quantity or 'N/A' }}</td>
+          <td>{{ d.location or 'N/A' }}</td>
+          <td><span class="pill {{ 'matched' if d.matched else 'pending' }}">{{ 'Matched' if d.matched else 'Pending' }}</span></td>
+          <td>
+            <form method="POST" action="{{ url_for('main.admin_toggle_donation', donation_id=d.id) }}">
+              <button type="submit">Toggle Status</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
+
+

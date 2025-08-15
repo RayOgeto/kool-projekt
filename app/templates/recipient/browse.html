@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Browse Donations</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    nav {
+      background-color: #1E40AF;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    nav .logo {
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 15px;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #93c5fd;
+    }
+
+    nav .logout-btn {
+      background-color: #C2410C;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+
+    nav .logout-btn:hover {
+      background-color: #f97316;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: bold;
+      text-align: center;
+      color: #1E40AF;
+      margin-bottom: 20px;
+    }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .filters input {
+      padding: 12px 16px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      outline-color: #60a5fa;
+    }
+
+    .filters button {
+      background-color: #1E40AF;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .filters button:hover {
+      background-color: #3B82F6;
+    }
+
+    /* Cards */
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .item {
+      font-weight: bold;
+      font-size: 18px;
+      color: #2563eb;
+      margin-bottom: 5px;
+    }
+
+    .muted {
+      color: #6b7280;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .card img {
+      max-width: 220px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      margin-top: 10px;
+    }
+
+    /* Report form */
+    .report {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .report input {
+      flex: 1;
+      padding: 10px 14px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      outline-color: #60a5fa;
+    }
+
+    .report button {
+      background-color: #C2410C;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .report button:hover {
+      background-color: #f97316;
+    }
+
+    /* Empty state */
+    .empty {
+      text-align: center;
+      color: #6b7280;
+      padding: 40px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    @media (max-width: 768px) {
+      nav ul {
+        gap: 12px;
+      }
+
+      .filters {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card img {
+        max-width: 100%;
+      }
+
+      .report {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <a href="{{ url_for('main.dashboard') }}" class="logo">UjamaaFlow</a>
+    <ul>
+      <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+      <li><a href="{{ url_for('main.browse') }}">Browse Donations</a></li>
+      
+      <li>
+        <form action="{{ url_for('auth.logout') }}" method="POST" style="display:inline;">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1>Available Donations</h1>
+    <form class="filters" method="GET" action="{{ url_for('main.browse') }}">
+      <input type="text" name="q" placeholder="Search items or description" value="{{ q }}" />
+      <input type="text" name="location" placeholder="Location" value="{{ location }}" />
+      <button type="submit">Search</button>
+    </form>
+
+    {% if donations %}
+      {% for d in donations %}
+        <div class="card">
+          <div class="item">{{ d.item }}</div>
+          {% if d.description %}
+            <div class="muted">{{ d.description }}</div>
+          {% endif %}
+          <div class="muted">
+            Quantity: {{ d.quantity or 'N/A' }} • Location: {{ d.location or 'N/A' }}
+          </div>
+          {% if d.media and d.media|length > 0 %}
+            <img src="{{ d.media[0].file_path }}" alt="Donation image" />
+          {% endif %}
+          <form class="report" action="{{ url_for('main.report_donation', donation_id=d.id) }}" method="POST">
+            <input type="text" name="reason" placeholder="Report reason (optional)" />
+            <button type="submit">Report</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">No donations found. Try different filters.</div>
+    {% endif %}
+  </div>
+</body>
+</html>

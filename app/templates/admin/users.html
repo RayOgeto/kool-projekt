@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin • Users</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#f8fafc;color:#111827}
+    .container{max-width:1100px;margin:20px auto;padding:0 16px}
+    .nav{display:flex;gap:12px;margin-bottom:16px}
+    a.nav-link{background:#1E40AF;color:#fff;text-decoration:none;padding:8px 12px;border-radius:8px}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e5e7eb}
+    th,td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <a class="nav-link" href="{{ url_for('main.admin_dashboard') }}">Overview</a>
+      <a class="nav-link" href="{{ url_for('main.admin_donations') }}">Donations</a>
+      <a class="nav-link" href="{{ url_for('main.admin_requests') }}">Requests</a>
+      <a class="nav-link" href="{{ url_for('main.admin_reports') }}">Reports</a>
+      <a class="nav-link" href="{{ url_for('main.admin_users') }}">Users</a>
+    </div>
+    <h1>Users</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Username</th><th>Email</th><th>Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>{{ u.id }}</td>
+          <td>{{ u.username }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.role }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
+
+

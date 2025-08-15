@@ -22,7 +22,7 @@ def login():
             return redirect(url_for('main.admin_dashboard'))
         else:
             
-            return redirect(url_for('main.home'))
+            return redirect(url_for('main.dashboard'))
 
     return render_template('auth/login.html')
 

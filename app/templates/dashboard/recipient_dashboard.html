@@ -5,62 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Recipient Dashboard</title>
   <style>
+    /* --- Your CSS from before, unchanged --- */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f9fafb;
       color: #1f2937;
       line-height: 1.6;
     }
-
     .navbar {
       background-color: #1E3A8A;
       color: white;
       display: flex;
+      padding:10px;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 40px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
-
-    .logo {
-      font-size: 26px;
-      font-weight: bold;
-    }
-
-    .logo-accent {
-      color: #F97316;
-    }
-
+    .logo { font-size: 26px; font-weight: bold; }
+    .logo-accent { color: #F97316; }
     .nav-links {
       list-style: none;
       display: flex;
       gap: 24px;
     }
-
     .nav-links a {
       text-decoration: none;
       color: white;
       font-weight: 500;
       transition: color 0.3s ease;
     }
-
-    .nav-links a:hover {
-      color: #FCD34D;
-    }
-
+    .nav-links a:hover { color: #FCD34D; }
     h2 {
       text-align: center;
       font-size: 28px;
       margin: 30px 0 10px;
       color: #1E40AF;
     }
-
     p, a {
       text-align: center;
       display: block;
@@ -68,11 +53,7 @@
       color: #374151;
       font-size: 16px;
     }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
+    a:hover { text-decoration: underline; }
     ul {
       list-style: none;
       display: flex;
@@ -81,7 +62,6 @@
       margin: 20px 0;
       padding: 0;
     }
-
     ul li a {
       background-color: #1E40AF;
       color: #fff;
@@ -90,32 +70,19 @@
       text-decoration: none;
       transition: background 0.3s ease;
     }
-
-    ul li a:hover {
-      background-color: #3B82F6;
-    }
-
+    ul li a:hover { background-color: #3B82F6; }
     .receivers-header {
       background: linear-gradient(to right, #f76104, #C2410C);
       padding: 10px 20px;
       text-align: center;
       color: white;
     }
-
-    .receivers-header h1 {
-      font-size: 36px;
-    }
-
-    .receivers-header p {
-      font-size: 18px;
-      color: #DBEAFE;
-    }
-
+    .receivers-header h1 { font-size: 36px; }
+    .receivers-header p { font-size: 18px; color: #DBEAFE; }
     .search-filter {
       text-align: center;
       margin: 40px auto 30px;
     }
-
     .search-filter input, .search-filter select {
       padding: 12px 16px;
       font-size: 16px;
@@ -124,7 +91,6 @@
       border: 1px solid #cbd5e1;
       outline-color: #60a5fa;
     }
-
     .donation-list {
       display: flex;
       flex-wrap: wrap;
@@ -132,7 +98,6 @@
       gap: 20px;
       padding: 0 20px 50px;
     }
-
     .donation-card {
       background: #fff;
       padding: 20px;
@@ -141,21 +106,9 @@
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
       transition: transform 0.2s ease;
     }
-
-    .donation-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .donation-card h3 {
-      color: #2563eb;
-      margin-bottom: 8px;
-    }
-
-    .donation-card p {
-      font-size: 14px;
-      color: #4b5563;
-    }
-
+    .donation-card:hover { transform: translateY(-5px); }
+    .donation-card h3 { color: #2563eb; margin-bottom: 8px; }
+    .donation-card p { font-size: 14px; color: #4b5563; }
     .receivers-list {
       display: flex;
       flex-wrap: wrap;
@@ -164,7 +117,6 @@
       padding: 40px 20px;
       background-color: #f3f4f6;
     }
-
     .receiver-card {
       background-color: #ffffff;
       border-radius: 12px;
@@ -173,31 +125,19 @@
       width: 300px;
       text-align: center;
     }
-
     .receiver-card img {
       width: 100%;
       height: auto;
       border-radius: 10px;
       margin-bottom: 15px;
     }
-
-    .receiver-card h3 {
-      color: #1e40af;
-      margin-bottom: 6px;
-    }
-
-    .receiver-card p {
-      color: #6b7280;
-      margin: 4px 0;
-      font-size: 15px;
-    }
-
+    .receiver-card h3 { color: #1e40af; margin-bottom: 6px; }
+    .receiver-card p { color: #6b7280; margin: 4px 0; font-size: 15px; }
     .receiver-card blockquote {
       color: #0e7490;
       font-style: italic;
       margin-top: 12px;
     }
-
     .site-footer {
       background-color: #1f2937;
       color: #9ca3af;
@@ -207,132 +147,151 @@
       margin-top: 60px;
     }
 
+    .search-filter .btn-primary {
+      background-color: #1E40AF;
+      color: #fff;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .search-filter .btn-primary:hover { background-color: #3B82F6; }
+
+    .search-filter .btn-secondary {
+      background-color: #E5E7EB;
+      color: #1f2937;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .search-filter .btn-secondary:hover { background-color: #D1D5DB; }
+
     @media (max-width: 768px) {
-      .nav-links {
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-        margin-top: 10px;
-      }
-
-      .donation-card, .receiver-card {
-        width: 90%;
-      }
-
-      ul {
-        flex-direction: column;
-        align-items: center;
-      }
+      .nav-links { flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
+      .donation-card, .receiver-card { width: 90%; }
+      ul { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Navbar -->
   <nav class="navbar">
-    <div class="logo">Ujamaaflow <span class="logo-accent">.</span></div>
+    <div class="logo">Ujamaaflow <span class="logo-accent">❤</span></div>
     <ul class="nav-links">
-      <li><a href="{{ url_for('main.admin_dashboard') }}">Admin</a></li>
-      <li><a href="{{ url_for('main.resource') }}">Resources</a></li>
-      <li><a href="{{ url_for('main.dashboard') }}">Receivers</a></li>
       <li><a href="{{ url_for('main.contact') }}">Contact Us</a></li>
+      <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
     </ul>
   </nav>
 
-  <h2>Recipient Dashboard</h2>
-  <p>Welcome, {{ current_user.username }}!</p>
-  <a href="{{ url_for('auth.logout') }}">Logout</a>
+  <!-- Welcome -->
+  <h2>Welcome, {{ current_user.username }}!</h2>
 
+  <!-- Actions -->
   <ul>
-    <li><a href="#">Request Resources</a></li>
-    <li><a href="#">My Requests</a></li>
+    <li><a href="{{ url_for('main.request_resource') }}">Request Resources</a></li>
+    <li><a href="{{ url_for('main.browse') }}">Browse Donations</a></li>
   </ul>
 
+  <!-- Header -->
   <header class="receivers-header">
     <h1>Search for what you need</h1>
     <p>Search and filter through available donated items.</p>
   </header>
 
-  <div class="search-filter">
-    <input type="text" id="searchInput" placeholder="Search for items..." />
-    <select id="categoryFilter">
-      <option value="all">All Categories</option>
-      <option value="Food">Food</option>
-      <option value="Medical">Medical</option>
-      <option value="Education">Education</option>
-      <option value="Tech">Tech</option>
-      <option value="Community">Community</option>
-    </select>
-  </div>
+  <!-- Search Filter -->
+  <form class="search-filter" id="filterForm">
+  <input type="text" id="searchInput" placeholder="Search for items..." />
+  <select id="categoryFilter">
+    <option value="all">All Categories</option>
+    <option value="Food">Food</option>
+    <option value="Medical">Medical</option>
+    <option value="Education">Education</option>
+    <option value="Tech">Tech</option>
+    <option value="Community">Community</option>
+  </select>
 
+  <button type="submit" class="btn-primary">Search</button>
+  <button type="button" id="clearBtn" class="btn-secondary">Clear</button>
+</form>
+
+
+  <!-- Donation List (Dynamic) -->
   <section class="donation-list" id="donationList">
-    <div class="donation-card" data-category="Medical" data-keywords="medicine medical support">
-      <h3>Medical Kit</h3>
-      <p><strong>Category:</strong> Medical</p>
-      <p><strong>Available Since:</strong> July 27, 2025</p>
-    </div>
-
-    <div class="donation-card" data-category="Education" data-keywords="books school educational materials">
-      <h3>Textbooks Set</h3>
-      <p><strong>Category:</strong> Education</p>
-      <p><strong>Available Since:</strong> July 26, 2025</p>
-    </div>
-
-    <div class="donation-card" data-category="Food" data-keywords="food package relief">
-      <h3>Food Relief Package</h3>
-      <p><strong>Category:</strong> Food</p>
-      <p><strong>Available Since:</strong> July 24, 2025</p>
-    </div>
-
-    <div class="donation-card" data-category="Tech" data-keywords="tech gadget device">
-      <h3>Refurbished Laptop</h3>
-      <p><strong>Category:</strong> Tech</p>
-      <p><strong>Available Since:</strong> July 22, 2025</p>
-    </div>
-
-    <div class="donation-card" data-category="Community" data-keywords="clean up community service">
-      <h3>Clean Up Supplies</h3>
-      <p><strong>Category:</strong> Community</p>
-      <p><strong>Available Since:</strong> July 20, 2025</p>
-    </div>
+    {% for donation in donations %}
+      <div class="donation-card" 
+           data-category="{{ donation.category }}" 
+           data-keywords="{{ donation.keywords }}">
+        <h3>{{ donation.title }}</h3>
+        <p><strong>Category:</strong> {{ donation.category }}</p>
+        <p><strong>Available Since:</strong> {{ donation.date.strftime('%B %d, %Y') }}</p>
+      </div>
+    {% endfor %}
   </section>
 
+  <!-- Receiver Stories -->
   <section class="receivers-list">
-    <div class="receiver-card">
-      <img src="static/img/images.jpeg" alt="Receiver Photo" />
-      <h3>Mary A.</h3>
-      <p><strong>Aid:</strong> Medical support</p>
-      <p><strong>Date:</strong> July 15, 2025</p>
-      <blockquote>“Thank you for saving my son’s life. Your help came just in time.”</blockquote>
-    </div>
-
-    <div class="receiver-card">
-      <img src="static/img/school.jpg" alt="Receiver Photo" />
-      <h3>Green School Initiative</h3>
-      <p><strong>Aid:</strong> Educational materials</p>
-      <p><strong>Date:</strong> July 5, 2025</p>
-      <blockquote>“Your donation helped us get textbooks for over 300 students.”</blockquote>
-    </div>
-
-    <div class="receiver-card">
-      <img src="static/img/food.jpg" alt="Receiver Photo" />
-      <h3>Anonymous</h3>
-      <p><strong>Aid:</strong> Food package</p>
-      <p><strong>Date:</strong> June 28, 2025</p>
-      <blockquote>“Bless you for the food. I had nothing left that day.”</blockquote>
-    </div>
-
-    <div class="receiver-card">
-      <img src="static/img/techG.webp" alt="Receiver Photo" />
-      <h3>Anonymous</h3>
-      <p><strong>Aid:</strong> Tech Gadget</p>
-      <p><strong>Date:</strong> June 29, 2025</p>
-      <blockquote>“Thank you, you changed the directory of my life.”</blockquote>
-    </div>
+    {% for story in stories %}
+      <div class="receiver-card">
+        <img src="{{ url_for('static', filename=story.image) }}" alt="Receiver Photo" />
+        <h3>{{ story.name }}</h3>
+        <p><strong>Aid:</strong> {{ story.aid }}</p>
+        <p><strong>Date:</strong> {{ story.date.strftime('%B %d, %Y') }}</p>
+        <blockquote>“{{ story.testimonial }}”</blockquote>
+      </div>
+    {% endfor %}
   </section>
 
+  <!-- Footer -->
   <footer class="site-footer">
-    <p>&copy; 2025 YourOrganization. All rights reserved.</p>
+    <p>&copy; 2025 UjamaaFlow. All rights reserved.</p>
   </footer>
+
+  <!-- Search & Filter Script -->
+  <script>
+  const searchInput = document.getElementById("searchInput");
+  const categoryFilter = document.getElementById("categoryFilter");
+  const cards = document.querySelectorAll(".donation-card");
+  const form = document.getElementById("filterForm");
+  const clearBtn = document.getElementById("clearBtn");
+
+  function filterDonations() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectedCategory = categoryFilter.value;
+
+    cards.forEach(card => {
+      const keywords = (card.dataset.keywords || "").toLowerCase();
+      const category = card.dataset.category || "";
+      const title = card.querySelector("h3")?.textContent.toLowerCase() || "";
+
+      const matchesSearch = !searchTerm || keywords.includes(searchTerm) || title.includes(searchTerm);
+      const matchesCategory = selectedCategory === "all" || category === selectedCategory;
+
+      card.style.display = matchesSearch && matchesCategory ? "block" : "none";
+    });
+  }
+
+  // Submit = Search (also works on Enter)
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    filterDonations();
+  });
+
+  // Optional: live updates as you type/change
+  searchInput.addEventListener("input", filterDonations);
+  categoryFilter.addEventListener("change", filterDonations);
+
+  // Clear button resets and shows all
+  clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    categoryFilter.value = "all";
+    filterDonations();
+  });
+</script>
+
 
 </body>
 </html>

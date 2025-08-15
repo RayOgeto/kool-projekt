@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Donations</title>
+  <style>
+    * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    body { font-family: Arial, sans-serif; background:#f8fafc; color:#111827; }
+    .navbar {
+            background: rgba(30, 64, 175, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .nav-bar1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            margin-left:60px;
+            color:#fff;
+        }
+
+        .logo-accent {
+            color: #F97316;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 24px;
+            margin-right: 60px;
+            font-size: 18px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            padding:12px;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #FCD34D;
+            text-decoration: underline;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin-top: 80px;
+            margin-left: auto;
+            margin-right: auto;
+            align-items:center;
+            padding: 30px 20px;
+        }
+    .container { max-width: 960px; margin: 20px auto; padding: 0 16px; }
+    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+    .muted { color:#6b7280; font-size: .9em; }
+    .pill { display:inline-block; padding:4px 8px; border-radius:9999px; font-size:.8em; }
+    .pill.pending { background:#fff7ed; color:#9a3412; border:1px solid #fed7aa; }
+    .pill.matched { background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
+    .actions { display:flex; gap:10px; margin-top:8px; }
+    a.btn { text-decoration:none; background:#2563eb; color:#fff; padding:8px 12px; border-radius:8px; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+        <div class="nav-bar1">
+            <div style="font-weight:800;" class="logo">UjamaaFlow</div>
+            <div style="display:flex;gap:10px;" class="nav-links">
+                <a href="{{ url_for('main.dashboard') }}" style="color:#fff;text-decoration:none;">Dashboard</a>
+                <a href="{{ url_for('main.donate') }}" style="color:#fff;text-decoration:none;">Create Donation</a>
+                <a href="{{ url_for('main.my_donations') }}" style="color:#fff;text-decoration:none;">My Donations</a>
+                <a href="{{ url_for('auth.logout') }}" style="color:#fff;text-decoration:none;">Logout</a>
+            </div>
+        </div>
+    </nav>
+  <div class="main-container">
+    <div class="header">
+      <h1>My Donations</h1>
+      <div>
+        <a class="btn" href="{{ url_for('main.donate') }}">Donate</a>
+        <a class="btn" href="{{ url_for('main.dashboard') }}" style="background:#6b7280;">Back to Dashboard</a>
+      </div>
+    </div>
+
+    {% if donations %}
+      {% for d in donations %}
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>{{ d.item }}</strong>
+              <div class="muted">Qty: {{ d.quantity or 'N/A' }} • {{ d.location or 'No location' }}</div>
+              {% if d.description %}<div class="muted">{{ d.description }}</div>{% endif %}
+            </div>
+            <div>
+              <span class="pill {{ 'matched' if d.matched else 'pending' }}">{{ 'Matched' if d.matched else 'Pending' }}</span>
+            </div>
+          </div>
+          {% if d.media and d.media|length > 0 %}
+            <div style="margin-top:8px;">
+              <img src="{{ d.media[0].file_path }}" alt="Donation image" style="max-width:200px; border-radius:8px; border:1px solid #e5e7eb;" />
+            </div>
+          {% endif %}
+          <div class="actions">
+            <a class="btn" href="{{ url_for('main.donate') }}">Duplicate</a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="card">
+        <p class="muted">You haven't created any donations yet.</p>
+        <div class="actions">
+          <a class="btn" href="{{ url_for('main.donate') }}">Start your first donation</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
+
+
